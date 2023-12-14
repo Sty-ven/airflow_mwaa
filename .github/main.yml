@@ -1,0 +1,28 @@
+# File: .github/workflows/main.yml
+
+name: Airflow CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: your-docker-image:latest
+
+      - name: Deploy to MWAA
+        uses: aws-actions/aws-cli@v2
+        with:
+          args: mwaa create-environment --name your-mwaa-environment
+          # Add more AWS CLI commands for deploying DAGs to MWAA
